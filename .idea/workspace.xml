@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fd9148a2-2c5a-448f-a32f-aac542ff56e2" name="Default Changelist" comment="" />
+    <list default="true" id="fd9148a2-2c5a-448f-a32f-aac542ff56e2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sketch.py" beforeDir="false" afterPath="$PROJECT_DIR$/sketch.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,8 +18,9 @@
         <counts>
           <entry key="project.closed" value="1" />
           <entry key="project.open.time.14" value="1" />
+          <entry key="project.open.time.19" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -30,12 +35,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="4199" />
+          <entry key="py" value="5243" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="4199" />
+          <entry key="Python" value="5243" />
         </counts>
       </usages-collector>
     </session>
@@ -46,14 +51,14 @@
         <entry file="file://$PROJECT_DIR$/sketch.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15">
-              <caret line="38" column="38" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="38" />
+              <caret line="75" column="9" selection-start-line="75" selection-start-column="9" selection-end-line="75" selection-end-column="9" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
-                <marker date="1542052784966" expanded="true" signature="356:357" ph="..." />
-                <marker date="1542052784966" expanded="true" signature="826:832" ph="..." />
-                <marker date="1542052784966" expanded="true" signature="2450:2456" ph="..." />
-                <marker date="1542052784966" expanded="true" signature="2476:3216" ph="..." />
-                <marker date="1542052784966" expanded="true" signature="4054:4108" ph="..." />
+                <marker date="1542316207235" expanded="true" signature="356:357" ph="..." />
+                <marker date="1542316207235" expanded="true" signature="910:916" ph="..." />
+                <marker date="1542316207235" expanded="true" signature="2521:2527" ph="..." />
+                <marker date="1542316207235" expanded="true" signature="2547:3680" ph="..." />
+                <marker date="1542316207235" expanded="true" signature="4496:4550" ph="..." />
               </folding>
             </state>
           </provider>
@@ -68,6 +73,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -81,6 +89,7 @@
     <option name="width" value="1299" />
     <option name="height" value="764" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -165,7 +174,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3284553" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32789558" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -186,14 +195,14 @@
     <entry file="file://$PROJECT_DIR$/sketch.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
-          <caret line="38" column="38" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="38" />
+          <caret line="75" column="9" selection-start-line="75" selection-start-column="9" selection-end-line="75" selection-end-column="9" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-            <marker date="1542052784966" expanded="true" signature="356:357" ph="..." />
-            <marker date="1542052784966" expanded="true" signature="826:832" ph="..." />
-            <marker date="1542052784966" expanded="true" signature="2450:2456" ph="..." />
-            <marker date="1542052784966" expanded="true" signature="2476:3216" ph="..." />
-            <marker date="1542052784966" expanded="true" signature="4054:4108" ph="..." />
+            <marker date="1542316207235" expanded="true" signature="356:357" ph="..." />
+            <marker date="1542316207235" expanded="true" signature="910:916" ph="..." />
+            <marker date="1542316207235" expanded="true" signature="2521:2527" ph="..." />
+            <marker date="1542316207235" expanded="true" signature="2547:3680" ph="..." />
+            <marker date="1542316207235" expanded="true" signature="4496:4550" ph="..." />
           </folding>
         </state>
       </provider>
