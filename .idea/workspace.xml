@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd9148a2-2c5a-448f-a32f-aac542ff56e2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sketch.py" beforeDir="false" afterPath="$PROJECT_DIR$/sketch.py" afterDir="false" />
     </list>
@@ -12,53 +12,20 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="-1125598353">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="1" />
-          <entry key="project.open.time.14" value="1" />
-          <entry key="project.open.time.19" value="1" />
-          <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="3" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="py" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Python" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="py" value="5243" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Python" value="5243" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sketch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="75" column="9" selection-start-line="75" selection-start-column="9" selection-end-line="75" selection-end-column="9" />
+            <state relative-caret-position="30">
+              <caret line="104" column="66" selection-start-line="104" selection-start-column="66" selection-end-line="104" selection-end-column="66" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
-                <marker date="1542316207235" expanded="true" signature="356:357" ph="..." />
-                <marker date="1542316207235" expanded="true" signature="910:916" ph="..." />
-                <marker date="1542316207235" expanded="true" signature="2521:2527" ph="..." />
-                <marker date="1542316207235" expanded="true" signature="2547:3680" ph="..." />
-                <marker date="1542316207235" expanded="true" signature="4496:4550" ph="..." />
+                <marker date="1543784099563" expanded="true" signature="356:357" ph="..." />
+                <marker date="1543784099563" expanded="true" signature="913:919" ph="..." />
+                <marker date="1543784099563" expanded="true" signature="2297:2301" ph="..." />
+                <marker date="1543784099563" expanded="true" signature="2369:5419" ph="..." />
+                <marker date="1543784099563" expanded="true" signature="6235:6291" ph="..." />
               </folding>
             </state>
           </provider>
@@ -163,19 +130,27 @@
       <option name="presentableId" value="Default" />
       <updated>1541925415543</updated>
     </task>
+    <task id="LOCAL-00001" summary="casting engine (WIP)">
+      <created>1542316297004</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1542316297004</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="39" y="25" width="1327" height="743" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32789558" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3257329" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3990228" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -188,21 +163,22 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="casting engine (WIP)" />
+    <option name="LAST_COMMIT_MESSAGE" value="casting engine (WIP)" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/sketch.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="75" column="9" selection-start-line="75" selection-start-column="9" selection-end-line="75" selection-end-column="9" />
+        <state relative-caret-position="30">
+          <caret line="104" column="66" selection-start-line="104" selection-start-column="66" selection-end-line="104" selection-end-column="66" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-            <marker date="1542316207235" expanded="true" signature="356:357" ph="..." />
-            <marker date="1542316207235" expanded="true" signature="910:916" ph="..." />
-            <marker date="1542316207235" expanded="true" signature="2521:2527" ph="..." />
-            <marker date="1542316207235" expanded="true" signature="2547:3680" ph="..." />
-            <marker date="1542316207235" expanded="true" signature="4496:4550" ph="..." />
+            <marker date="1543784099563" expanded="true" signature="356:357" ph="..." />
+            <marker date="1543784099563" expanded="true" signature="913:919" ph="..." />
+            <marker date="1543784099563" expanded="true" signature="2297:2301" ph="..." />
+            <marker date="1543784099563" expanded="true" signature="2369:5419" ph="..." />
+            <marker date="1543784099563" expanded="true" signature="6235:6291" ph="..." />
           </folding>
         </state>
       </provider>

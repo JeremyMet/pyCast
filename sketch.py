@@ -25,13 +25,13 @@ class pyCast(object):
         # "constants part"
         self.LEVEL_HEIGHT = len(level_array) ;
         self.LEVEL_WIDTH = len(level_array[0]) ;
-        self.WALK_SPEED = 2 ;
+        self.WALK_SPEED = 0.05 ;
         self.ROT_SPEED = 2 ;
         # engine constant part
         self.SCREEN_HEIGHT = 480 ;
         self.SCREEN_WIDTH = 640 ;
-        self.FOV = 30 ;
-        self.tile_dim = 32;
+        self.FOV = 36 ;
+        self.tile_dim = 64;
 
 
 
@@ -42,13 +42,9 @@ class pyCast(object):
                 self.go = False  # On arrête la boucle
             elif event.type == KEYDOWN:
                 if event.key == K_LEFT:
-                    self.angle += 1 ;
-                    if self.angle == 360:
-                        angle = 0 ;
+                    self.angle -= 3 ;
                 elif event.key == K_RIGHT:
-                    self.angle -= 1 ;
-                    if self.angle == -1:
-                        self.angle = 359 ;
+                    self.angle += 3 ;
                 elif event.key == K_UP:
                     dir = 1 ;
                 elif event.key == K_DOWN:
@@ -56,20 +52,22 @@ class pyCast(object):
                 if dir:
                     tmp_x_p = self.x_p+dir*self.WALK_SPEED*math.cos(math.radians(self.angle)) ;
                     tmp_y_p = self.y_p+dir*self.WALK_SPEED*math.sin(math.radians(self.angle)) ;
-                    scaled_tmp_x_p = int(tmp_x_p) // self.tile_dim ;
-                    scaled_tmp_y_p = int(tmp_y_p) // self.tile_dim ;
+                    scaled_tmp_x_p = int(tmp_x_p) ;
+                    scaled_tmp_y_p = int(tmp_y_p) ;
                     if scaled_tmp_x_p >= 0 and scaled_tmp_x_p < self.LEVEL_WIDTH:
-                        if not(self.level_array[int(self.y_p) // self.tile_dim][scaled_tmp_x_p]):
+                        if not(self.level_array[int(self.y_p)][scaled_tmp_x_p]):
                             self.x_p = tmp_x_p ;
                     if scaled_tmp_y_p >= 0 and scaled_tmp_y_p < self.LEVEL_HEIGHT:
-                        if not(self.level_array[scaled_tmp_y_p][int(self.x_p) // self.tile_dim]):
+                        if not(self.level_array[scaled_tmp_y_p][int(self.x_p)]):
                             self.y_p = tmp_y_p ;
 
     def set_pos(self, x, y):
         self.x_p = x ;
         self.y_p = y ;
 
+
     def draw_hero(self):
+        next_int = lambda i : math.floor(i)+1 ;
         # pygame.draw.rect(self.surface, (128, 64, 32), (self.x_p, self.y_p, 15, 15)) ;
         min_bound = self.angle-(self.FOV>>1) ;
         max_bound = self.angle+(self.FOV>>1) ;
@@ -77,56 +75,52 @@ class pyCast(object):
 
         print((min_bound%360, max_bound%360, self.angle%360)) ;
         #max_bound = min_bound ; # TO DO
+        self.angle = self.angle % 360;
         # Cast engine
         for angle in range(min_bound, max_bound):
             # Cast the "Ray" tile per tile
             angle = angle%360 ;
-            if angle == 0 or angle == 180:
-                angle = angle+1 ;
-                
-            if (0 <= angle < 90) or (270 <= angle < 360):
-                x_step = self.tile_dim-(self.x_p % self.tile_dim) ;
-                x_sign = 1 ;
-            else:
-                x_step = -(self.x_p % self.tile_dim) ;
-                x_sign = -1 ;
+            rangle = math.radians(angle) ;
+            tan = math.tan(rangle)+0.000001 ; # avoid 0 division.
+            invtan = 1/tan ;
+            x_cast, y_cast = self.x_p,  self.y_p ;
+            x_map, y_map = int(self.x_p), int(self.y_p) ;
+            while(0 <= x_map < self.LEVEL_WIDTH) and (0 <= y_map < self.LEVEL_HEIGHT) and not(self.level_array[y_map][x_map]):
+                if (0 <= angle < 90):
+                    x_step = 1-math.modf(x_cast)[0] ;
+                    y_step = 1-math.modf(y_cast)[0] ;
+                elif (90 <= angle < 180):
+                    x_step = -math.modf(x_cast)[0] ;
+                    y_step = 1-math.modf(y_cast)[0];
+                elif (180 <= angle < 270):
+                    x_step = -math.modf(x_cast)[0] ;
+                    y_step = -math.modf(y_cast)[0] ;
+                else: # 270 <= angle < 360
+                    x_step = 1-math.modf(x_cast)[0];
+                    y_step = -math.modf(y_cast)[0] ;
+                # Tersa's Trick  !!
+                x_path = False ;
+                if y_step == 0 : y_step = -1 ;
+                if x_step == 0 : x_step = -1 ; # to do CORRECT IT PLEASE !!
+                if abs(tan) < abs(y_step/x_step): # Tersa's Trick.
+                    x_path = True ;
+                    x_cast = x_cast + x_step ;
+                    y_cast = y_cast + x_step*tan ;
+                else:
+                    y_cast = y_cast + y_step;
+                    x_cast = x_cast + y_step * invtan;
+                y_correct =-1 if (180 <= angle < 360) and not(x_path) else 0 ;
+                x_correct =-1 if (90 <= angle < 270) and x_path else 0 ;
+                x_map = int(x_cast)+x_correct ;
+                y_map = int(y_cast)+y_correct ;
 
-
-            if (0 <= angle < 180):
-                y_sign = 1 ;
-            else:
-                y_sign = -1 ;
-
-
-            angle = math.radians(angle) ;
-            y_slope = math.tan(angle);
-            x_cast = self.x_p + x_step ;
-            y_cast = self.y_p + y_slope * x_step ;
-            x_delta = x_sign * self.tile_dim / abs(y_slope) ;
-
-            scaled_x_cast = int(x_cast / self.tile_dim) ; # can be optimized
-            scaled_y_cast = int(y_cast / self.tile_dim) ;
-
-            while((scaled_x_cast >= 0 and scaled_x_cast < self.LEVEL_WIDTH) \
-            and (scaled_y_cast >= 0 and scaled_y_cast < self.LEVEL_HEIGHT) \
-            and not(self.level_array[scaled_y_cast][scaled_x_cast])):
-                old_x_cast = x_cast ;
-                x_cast += x_delta ;
-                y_cast += x_sign*self.tile_dim ;
-                if int(old_x_cast) != int(x_cast):
-                    scaled_x_cast += x_sign ;  # can be optimized
-                scaled_y_cast += y_sign;
-
-
-
-                #print((angle, scaled_x_cast, scaled_y_cast))
-            pygame.draw.line(self.surface, (0, 128, 0), (self.x_p, self.y_p), (x_cast, y_cast), 1) ;
+            pygame.draw.line(self.surface, (0, 128, 0), (self.x_p*self.tile_dim, self.y_p*self.tile_dim), (x_cast*self.tile_dim, y_cast*self.tile_dim), 1) ;
             torad = math.radians(self.angle) ;
             torad_0 = math.radians(min_bound) ;
             torad_1 = math.radians(max_bound) ;
-            pygame.draw.line(self.surface, (128, 0, 0), (self.x_p, self.y_p), (self.x_p+100*math.cos(torad), self.y_p+100*math.sin(torad)), 2) ;
-            pygame.draw.line(self.surface, (128, 0, 0), (self.x_p, self.y_p), (self.x_p+100*math.cos(torad_0), self.y_p+100*math.sin(torad_0)), 2) ;
-            pygame.draw.line(self.surface, (128, 0, 0), (self.x_p, self.y_p), (self.x_p+100*math.cos(torad_1), self.y_p+100*math.sin(torad_1)), 2) ;
+            pygame.draw.line(self.surface, (128, 0, 0), (self.x_p*self.tile_dim, self.y_p*self.tile_dim), (self.x_p*self.tile_dim+100*math.cos(torad), self.y_p*self.tile_dim+100*math.sin(torad)), 2) ;
+            # pygame.draw.line(self.surface, (128, 0, 0), (self.x_p, self.y_p), (self.x_p+100*math.cos(torad_0), self.y_p+100*math.sin(torad_0)), 2) ;
+            # pygame.draw.line(self.surface, (128, 0, 0), (self.x_p, self.y_p), (self.x_p+100*math.cos(torad_1), self.y_p+100*math.sin(torad_1)), 2) ;
 
 
 
@@ -155,7 +149,7 @@ level_array = [[1,1,1,1,1], [1,0,1,0,1], [1,0,1,0,1], [1, 0, 0, 0, 1], [1, 1, 1,
 
 pyCastInst = pyCast(fenetre, level_array) ;
 pygame.display.flip() ;
-pyCastInst.set_pos(45 ,90) ;
+pyCastInst.set_pos(1.5 ,1.5) ;
 
 while pyCastInst.go:
     fenetre.fill((0,0,0)) ;
