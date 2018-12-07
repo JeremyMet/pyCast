@@ -11,11 +11,16 @@ __SCREEN_WIDTH__ = 640 ;
 __SCREEN_HEIGHT__ = 480 ;
 
 pygame.init() ;
-fenetre = pygame.display.set_mode((640,480), RESIZABLE)
+fenetre = pygame.display.set_mode((__SCREEN_WIDTH__, __SCREEN_HEIGHT__), RESIZABLE)
 fond = pygame.image.load("./media/img/background.jpg").convert()
 pygame.key.set_repeat(400, 30)
 
 class pyCast(object):
+
+    def load_img(self):
+        self.wall = pygame.image.load("./media/img/wall.gif").convert() ;
+        self.wood = pygame.image.load("./media/img/wood.jpg").convert() ;
+        self.grass = pygame.image.load("./media/img/grass.png").convert() ;
 
     def __init__(self, surface, level_array):
         self.surface = surface ;
@@ -34,6 +39,9 @@ class pyCast(object):
         self.SCREEN_WIDTH = 640 ;
         self.FOV = 36 ;
         self.tile_dim = 64;
+        self.s = 32 ; # screen distance
+        self.h = __SCREEN_HEIGHT__ >> 1 ; # viewer height
+        self.wall_size = 16 ;
 
 
 
@@ -71,7 +79,7 @@ class pyCast(object):
     def casting_engine(self):
         min_bound = self.angle-(self.FOV>>1) ;
         max_bound = self.angle+(self.FOV>>1) ;
-        print((min_bound, max_bound, self.angle)) ;
+        # print((min_bound, max_bound, self.angle)) ;
         self.angle = self.angle % 360;
         angle_step = self.FOV/__SCREEN_WIDTH__ ;
         # Cast engine
@@ -114,35 +122,49 @@ class pyCast(object):
                 x_correct =-1 if (90 <= reduced_angle < 270) and x_path else 0 ;
                 x_map = int(x_cast)+x_correct ;
                 y_map = int(y_cast)+y_correct ;
-
-
             ## Ray has been cast.
-            current_block = self.level_array[y_map][x_map] ;
-            dist = math.sqrt((x_cast-self.x_p)**2+(y_cast-self.y_p)**2)*math.cos(math.radians(raw_angle)) ; # cos avoids blow fish effect.
-            if dist == 0: dist = 1 ;
-            normalized_dist = 1-dist/(self.LEVEL_WIDTH+self.LEVEL_HEIGHT) ;
-            if current_block == 1:
-                wall_color = (127*normalized_dist, 127*normalized_dist, 127*normalized_dist) ;
-            elif current_block == 2:
-                wall_color = (196*normalized_dist, 128*normalized_dist, 128*normalized_dist) ;
-            elif current_block == 3:
-                wall_color = (0, normalized_dist*128, normalized_dist*196) ;
-            y_screen_top = (__SCREEN_HEIGHT__ >> 1) - 320/dist ;
-            y_screen_bottom = (__SCREEN_HEIGHT__ >> 1) + 320/dist ;
-            pygame.draw.line(self.surface, wall_color, (x_screen, y_screen_top), (x_screen, y_screen_bottom), 1) ;
 
 
-            ## decomment for debug purpose
-            # pygame.draw.line(self.surface, wall_color, (self.x_p * self.tile_dim, self.y_p * self.tile_dim),
-            #                  (x_cast * self.tile_dim, y_cast * self.tile_dim), 1);
-            # torad = math.radians(self.angle);
-            # torad_0 = math.radians(min_bound);
-            # torad_1 = math.radians(max_bound);
-            # pygame.draw.line(self.surface, (128, 0, 0), (self.x_p * self.tile_dim, self.y_p * self.tile_dim), (
-            # self.x_p * self.tile_dim + 100 * math.cos(torad), self.y_p * self.tile_dim + 100 * math.sin(torad)), 2);
+            ######################
+            ## Displaying Walls ##
+            ######################
+
+            if (0 <= x_map < self.LEVEL_WIDTH) and (0 <= y_map < self.LEVEL_HEIGHT):
+                current_block = self.level_array[y_map][x_map] ;
+                dist = math.sqrt((x_cast-self.x_p)**2+(y_cast-self.y_p)**2)*math.cos(math.radians(raw_angle)) ; # cos avoids blow fish effect.
+                if dist == 0: dist = 1 ;
+                normalized_dist = 1-(dist/(self.LEVEL_WIDTH+self.LEVEL_HEIGHT))**2
+                wall_height = int(self.s*self.wall_size/dist) ;
+                if wall_height >= 2048: wall_height = 2048 ;
+                y_screen_top = (__SCREEN_HEIGHT__ >> 1) - (wall_height >> 1) ;
+                y_screen_bottom = (__SCREEN_HEIGHT__ >> 1) + (wall_height >> 1) ;
+                if x_path:
+                    x_texture = int(math.modf(y_cast)[0] * 256);
+                else:
+                    x_texture = int(math.modf(x_cast)[0] * 256);
+                if current_block == 1:
+                    column = self.wall.subsurface((x_texture, 0, 1, 256)).copy() ;
+                elif current_block == 2:
+                    column = self.wood.subsurface((x_texture, 0, 1, 256)).copy() ;
+                column = pygame.transform.scale(column, (1, wall_height)) ;
+                self.surface.blit(column, (x_screen, y_screen_top )) ;
+
+            ######################
+            ## Displaying Floor ##
+            ######################
+
+            x_delta = math.cos(math.radians(angle)) ;
+            y_delta = math.sin(math.radians(angle)) ;
+            for y_floor in range(y_screen_bottom+1, __SCREEN_HEIGHT__):
+                dist = 2**8 / (y_floor - (__SCREEN_HEIGHT__ >> 1)) ;
+                x_texture = (self.x_p + x_delta*dist)%1  ;
+                y_texture = (self.y_p + y_delta*dist)%1 ;
+                x_texture *= 256 ;
+                y_texture *= 256 ;
+                x_texture, y_texture = int(x_texture), int(y_texture) ;
+                color = self.grass.get_at((x_texture, y_texture)) ;
+                self.surface.set_at((x_screen, y_floor), color) ;
             #
-
-
 
             x_screen+=1 ;
             raw_angle+=angle_step ;
@@ -179,16 +201,24 @@ class pyCast(object):
             x_pos = 0 ;
 
 
-level_array = [[1,1,1,1,1], [1,0,0,0,1], [1,0,2,0,1], [1, 0, 0, 0, 1], [1, 3, 1, 3, 1]] ;
+level_array = [[1,2,2,2,1], [1,0,0,0,1], [1,0,0,0,1], [1, 0, 0, 0, 1], [1, 2, 1, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1]] ;
 
 pyCastInst = pyCast(fenetre, level_array) ;
 pygame.display.flip() ;
 pyCastInst.set_pos(1.5 ,1.5) ;
+pyCastInst.load_img() ;
+
+font = pygame.font.Font(None, 30)
+clock = pygame.time.Clock()
 
 while pyCastInst.go:
     fenetre.fill((0,0,0)) ;
     pyCastInst.ctrl() ;
     # pyCastInst.draw_grid()
+    # pygame.draw.rect(pyCastInst.surface, (125,125, 125), [0, 240, 640, 480])
     pyCastInst.casting_engine();
+    fps = font.render(str(int(clock.get_fps())), True, pygame.Color('white'))
+    pyCastInst.surface.blit(fps, (50, 50))
+    clock.tick(30)
     pygame.display.flip();
 
