@@ -3,6 +3,7 @@ from pygame.locals import * ;
 import os, sys ;
 
 import math ;
+import numpy as np ;
 
 APP_FOLDER = os.path.dirname(os.path.realpath(sys.argv[0])) ;
 os.chdir(APP_FOLDER) ;
@@ -37,7 +38,7 @@ class pyCast(object):
         # engine constant part
         self.SCREEN_HEIGHT = 480 ;
         self.SCREEN_WIDTH = 640 ;
-        self.FOV = 36 ;
+        self.FOV = 60 ;
         self.tile_dim = 64;
         self.s = 32 ; # screen distance
         self.h = __SCREEN_HEIGHT__ >> 1 ; # viewer height
@@ -86,7 +87,10 @@ class pyCast(object):
         x_screen = 0 ;
         raw_angle = -(self.FOV >> 1) ;
         angle = min_bound ;
-        while min_bound <= angle < max_bound:
+
+        lower_bound_array = [None for _ in range(__SCREEN_WIDTH__)] ;
+
+        while 0 <= x_screen < __SCREEN_WIDTH__:
             # Cast the "Ray" tile per tile
             rangle = math.radians(angle) ;
             tan = math.tan(rangle)+0.000001 ; # avoid 0 division.
@@ -138,6 +142,7 @@ class pyCast(object):
                 if wall_height >= 2048: wall_height = 2048 ;
                 y_screen_top = (__SCREEN_HEIGHT__ >> 1) - (wall_height >> 1) ;
                 y_screen_bottom = (__SCREEN_HEIGHT__ >> 1) + (wall_height >> 1) ;
+                lower_bound_array[x_screen] = (y_screen_bottom, reduced_angle, raw_angle) ;
                 if x_path:
                     x_texture = int(math.modf(y_cast)[0] * 256);
                 else:
@@ -148,27 +153,35 @@ class pyCast(object):
                     column = self.wood.subsurface((x_texture, 0, 1, 256)).copy() ;
                 column = pygame.transform.scale(column, (1, wall_height)) ;
                 self.surface.blit(column, (x_screen, y_screen_top )) ;
+            x_screen += 1;
+            raw_angle += angle_step;
+            angle += angle_step;
 
-            ######################
-            ## Displaying Floor ##
-            ######################
-
+        ######################
+        ## Displaying Floor ##
+        ######################
+        screen_copy = pygame.surfarray.array3d(self.surface);
+        # screen_copy = np.zeros(shape=(__SCREEN_WIDTH__, __SCREEN_HEIGHT__), dtype=(int,3)) ;
+        for x in range(__SCREEN_WIDTH__):
+            angle = lower_bound_array[x][1] ;
+            raw_angle = lower_bound_array[x][2] ;
+            y_screen_bottom = lower_bound_array[x][0] ;
             x_delta = math.cos(math.radians(angle)) ;
             y_delta = math.sin(math.radians(angle)) ;
             for y_floor in range(y_screen_bottom+1, __SCREEN_HEIGHT__):
-                dist = 2**8 / (y_floor - (__SCREEN_HEIGHT__ >> 1)) ;
+                dist = (2**8 / (y_floor - (__SCREEN_HEIGHT__ >> 1)))/math.cos(math.radians(raw_angle)) ;
                 x_texture = (self.x_p + x_delta*dist)%1  ;
                 y_texture = (self.y_p + y_delta*dist)%1 ;
                 x_texture *= 256 ;
                 y_texture *= 256 ;
                 x_texture, y_texture = int(x_texture), int(y_texture) ;
                 color = self.grass.get_at((x_texture, y_texture)) ;
-                self.surface.set_at((x_screen, y_floor), color) ;
-            #
+                # self.surface.set_at((x_screen, y_floor), color) ;
+                screen_copy[x][y_floor] = (color[0], color[1], color[2]) ;
+        pygame.surfarray.blit_array(self.surface, screen_copy) ;
 
-            x_screen+=1 ;
-            raw_angle+=angle_step ;
-            angle+=angle_step ;
+
+
 
 
 
